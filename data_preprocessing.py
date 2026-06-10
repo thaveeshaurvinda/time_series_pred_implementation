@@ -29,3 +29,37 @@ def load_and_clean_data(file_path):
     return data
 
 
+# Handle outliers using IQR
+def handle_outliers_iqr(data, target_column = "Appliances"):
+    """
+    Finds outliers using the IQR method.
+    Replace extreme values with the upper or lower limit.
+    """
+    # Create a copy so original data is unchanged
+    cleaned_data = data.copy()
+
+    Q1 = cleaned_data[target_column].quantile(0.25)
+    Q3 = cleaned_data[target_column].quantile(0.75)
+    # Calculate Interquartile Range
+    IQR = Q3 - Q1
+
+    lower_limit = Q1 - (1.5 * IQR)
+    upper_limit = Q3 + (1.5 * IQR)
+
+    # Replace values above upper limit
+    cleaned_data[target_column] = np.where(
+        cleaned_data[target_column] > upper_limit,
+        upper_limit,
+        cleaned_data[target_column]
+    )
+
+    # Replace values below lower limit
+    cleaned_data[target_column] = np.where(
+        cleaned_data[target_column] < lower_limit,
+        lower_limit,
+        cleaned_data[target_column]
+    )
+    return cleaned_data
+
+
+
