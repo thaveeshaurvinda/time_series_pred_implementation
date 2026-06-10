@@ -15,4 +15,40 @@ def get_baseline_model():
     return baseline_model
 
 
+# Create LSTM model
+def get_lstm_model(input_shape):
+    """
+    Creates an LSTM neural network for time series prediction.
+    Parameters:
+    input_shape: tuple
+    Example:
+    (6, 20)
+
+    Meaning:
+    - 6 time steps (lookback window)
+    - 20 features
+    """
+    model = Sequential(
+        [
+            # LSTM Layer
+            LSTM(
+                units = 32, # Number of neurons
+                activation = "tanh", # Activation function
+                input_shape = input_shape, # Input shape
+                return_sequences = False # Return final output only
+            ),
+            # Dropout Layer
+            Dropout(0.2), # Drop 20% of neurons randomly
+            # Output Layer
+            Dense(units = 1) # Predict one value
+        ]
+    )
+    # Compile Model
+    model.compile(
+        optimizer = "adam", # Learning algorithm
+        loss = "mse" # Mean Squared Error
+    )
+
+    # Return completed model
+    return model
 
