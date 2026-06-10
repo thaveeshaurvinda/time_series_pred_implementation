@@ -36,5 +36,52 @@ def build_features(data, target_column="Appliances"):
     # Saturday = 5
     # Sunday = 6
 
+    # Morning vs night
+    # Weekday vs weekend
+    # Previous energy usage trends
+    # Environmental conditions
 
+    feature_data["is_weekend"] = (
+        feature_data["date"]
+        .dt.dayofweek
+        .apply(lambda day: 1.0 if day >= 5 else 0.0)
+    )
+
+    # Create historical lag features
+    # Value from 1 step earlier (10 minutes ago)
+    feature_data["target_lag_1"] = (
+        feature_data[target_column].shift(1)
+    )
+
+    # Value from 3 steps earlier (30 minutes ago)
+    feature_data["target_lag_3"] = (
+        feature_data[target_column].shift(3)
+    )
+
+    # Create rolling mean feature
+    # Rolling mean over previous 6 records
+    # Uses shift(1) so current value is not included
+    feature_data["target_roll_mean_6"] = (
+        feature_data[target_column]
+        .shift(1) # Use previous value as the first value in the rolling window (10 mins)
+        .rolling(window = 6) # Look back 6 previous values (6x10 = 60 minutes)
+        .mean()
+    )
+
+    # Create environmental interaction feature
+    # Check if both columns exist
+    if "T1" in feature_data.columns and "RH_1" in feature_data.columns:
+        # Temperature x Humidity
+        feature_data["indoor_comfort_index"] = (
+            feature_data["T1"] *
+            feature_data["RH_1"]
+        )
+
+    # Remove missing values
+    # Lag and rolling operations create NaN values in the first few rows
+    feature_data = feature_data.dropna()
+
+    # Reset row numbers after removing missing values
+    feature_data = feature_data.reset_index(drop = True)
+    return feature_data
 
