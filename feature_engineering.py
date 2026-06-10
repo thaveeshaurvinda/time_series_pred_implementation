@@ -85,3 +85,44 @@ def build_features(data, target_column="Appliances"):
     feature_data = feature_data.reset_index(drop = True)
     return feature_data
 
+
+# Convert data into 3D sequences
+def structure_3d_windows(X_data, y_data, lookback_steps = 6):
+    """
+    Converts normal 2D feature data into 3D sequences.
+    RNN/LSTM models require input shape:
+    [samples, time_steps, features]
+
+    Example:
+    Samples = 100
+    Time Steps = 6
+    Features = 20
+
+    Shape becomes:
+    (100, 6, 20)
+    """
+    # Store input sequences
+    X_sequences = []
+    # Store target values
+    y_sequences = []
+
+    # Loop through dataset
+    for i in range(len(X_data) - lookback_steps):
+        # Create one sequence window
+        current_window = X_data[
+            i:(i + lookback_steps), :
+        ]
+        X_sequences.append(current_window)
+
+        # Target value immediately after the sequence window
+        target_value = y_data[
+            i + lookback_steps
+        ]
+        y_sequences.append(target_value)
+
+    # Convert lists into NumPy arrays
+    X_sequences = np.array(X_sequences)
+    y_sequences = np.array(y_sequences)
+
+    return X_sequences, y_sequences
+
