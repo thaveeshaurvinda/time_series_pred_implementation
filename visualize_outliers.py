@@ -69,9 +69,9 @@ def generate_outlier_boxplot(filepath = "data/energy_data_set.csv"):
         median,
         -0.25,
         f"Median: {median:.0f} Wh",
-        color="black",
-        weight="bold",
-        horizontalalignment="center"
+        color = "black",
+        weight = "bold",
+        horizontalalignment = "center"
     )
 
     output_file = ("reports/outlier_boxplot.png")
