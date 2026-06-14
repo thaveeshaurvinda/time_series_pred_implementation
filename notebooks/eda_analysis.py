@@ -128,6 +128,6 @@ def run_comprehensive_eda(file_path, output_dir = "reports"):
 
 
 if __name__ == "__main__":
-    DATA_PATH = os.path.join("data", "energy_data_set.csv")
+    DATA_PATH = os.path.join("../data", "energy_data_set.csv")
     run_comprehensive_eda(DATA_PATH)
 
