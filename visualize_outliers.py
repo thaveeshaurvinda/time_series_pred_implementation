@@ -65,14 +65,7 @@ def generate_outlier_boxplot(filepath = "data/energy_data_set.csv"):
     )
 
     # Add median label
-    plt.text(
-        median,
-        -0.25,
-        f"Median: {median:.0f} Wh",
-        color = "black",
-        weight = "bold",
-        horizontalalignment = "center"
-    )
+    plt.text(median, -0.25, f"Median: {median:.0f} Wh", color = "black", weight = "bold", horizontalalignment = "center")
 
     output_file = ("reports/outlier_boxplot.png")
     plt.savefig(output_file, bbox_inches = "tight", dpi = 300)
